@@ -195,7 +195,7 @@ body.is-admin .openInv{display:inline-block!important}
   <section id="vecinos" class="testi"><div class="wrap">
     <div class="head"><h2>Lo que dicen los vecinos</h2></div>
     <div class="tgrid">
-      <blockquote><div class="stars" aria-label="5 estrellas">★★★★★</div><p>El pan de bono llega tibio y con el queso que debe ser. Ya no compro en otro lado.</p><cite>Marta R.</cite><small>Vecina de Suba</small></blockquote>
+      <blockquote><div class="stars" aria-label="5 estrellas">★★★★★</div><p>El pan de bono llega tibio y con el queso que debe ser. Ya no compro en otro lado.</p><cite>Marta R.</cite><small>Vecina de Teusaquillo</small></blockquote>
       <blockquote><div class="stars" aria-label="5 estrellas">★★★★★</div><p>La masa madre tiene un sabor que no encuentro ni en las cadenas. Pedí el domingo y estaba listo en diez minutos.</p><cite>Julián P.</cite><small>Cliente de todos los sábados</small></blockquote>
       <blockquote><div class="stars" aria-label="5 estrellas">★★★★★</div><p>Encargué la bandeja para el cumpleaños de mi mamá y no sobró nada. Atención amable y puntual.</p><cite>Andrea G.</cite><small>Barrio La Soledad</small></blockquote>
     </div>
@@ -206,16 +206,16 @@ body.is-admin .openInv{display:inline-block!important}
   <div>
     <h3>Dónde estamos</h3>
     <svg class="map" viewBox="0 0 400 200" role="img" aria-label="Mapa simulado: Donas en la esquina de la Carrera 15 con Calle 45"><rect width="400" height="200" fill="#e9dcc0"/><g fill="#f7efdc"><rect x="0" y="85" width="400" height="30"/><rect x="170" y="0" width="30" height="200"/></g><g fill="#c8b88f"><rect x="20" y="20" width="130" height="50" rx="6"/><rect x="220" y="20" width="150" height="50" rx="6"/><rect x="20" y="130" width="130" height="50" rx="6"/><rect x="220" y="130" width="150" height="50" rx="6"/></g><path d="M185 100c-12-18-12-18-12-26a12 12 0 0 1 24 0c0 8 0 8-12 26z" fill="#D97706"/><circle cx="185" cy="74" r="5" fill="#FDFBF7"/><text x="205" y="112" font-size="13" fill="#2C1D0C" font-family="sans-serif" font-weight="700">Donas</text></svg>
-    <p>Carrera 103B #151C-35, Barrio Suba Turingia, Bogotá</p>
+    <p>Carrera 15 #45-20, Barrio Teusaquillo, Bogotá</p>
   </div>
-  <div><h3>Horarios</h3><p>Lunes a domingo</p><p>6:00 AM a 10:00 PM</p><p>Primera hornada: 6:00 AM</p></div>
+  <div><h3>Horarios</h3><p>Lunes a domingo</p><p>6:00 AM a 8:00 PM</p><p>Primera hornada: 6:00 AM</p></div>
   <div><h3>Síguenos</h3><p>Cada día publicamos la hornada.</p>
     <div class="soc"><a href="https://instagram.com" target="_blank" rel="noopener">Instagram</a><a href="https://facebook.com" target="_blank" rel="noopener">Facebook</a><a href="https://tiktok.com" target="_blank" rel="noopener">TikTok</a></div>
   </div>
 </div>
 <div class="wrap"><p style="margin-top:2rem;opacity:.7">© 2026 Donas. Hecho con cariño en el barrio.</p><button class="btn line openInv" style="margin-top:.6rem;color:#f5e9d3;border-color:#E8C88A">Inventario (administrador)</button></div></footer>
 
-<a class="wa" href="https://wa.me/573227702299?text=Hola%20Donas" target="_blank" rel="noopener">WhatsApp</a>
+<a class="wa" href="https://wa.me/573001234567?text=Hola%20Donas" target="_blank" rel="noopener">WhatsApp</a>
 
 <div class="ov" id="ov"></div>
 <aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="dt" aria-hidden="true">
@@ -247,6 +247,7 @@ body.is-admin .openInv{display:inline-block!important}
   </form>
   <div id="invList"></div>
   <h3 style="margin:2rem 0 .7rem">Pedidos recibidos</h3><div id="adminOrders"></div>
+  <h3 style="margin:2rem 0 .7rem">Clientes registrados</h3><div id="adminUsers"></div>
   <button class="link" id="invReset" style="margin-top:1rem">Restaurar inventario original</button>
   <button class="link logout" style="margin-top:.5rem">Cerrar sesión de administrador</button>
 </div></div>
@@ -445,7 +446,7 @@ $("addForm").addEventListener("submit",function(e){
   f.reset();$("invErr").textContent="";invChanged();toast("Producto agregado al inventario");
 });
 $("invReset").onclick=function(){PRODUCTS=JSON.parse(JSON.stringify(DEFAULTS));invChanged();toast("Inventario restaurado")};
-function openInv(){if(!session||session.role!=="admin")return;renderInv();renderAdminOrders();$("inv").classList.add("on");$("inv").setAttribute("aria-hidden","false");document.body.classList.add("lock")}
+function openInv(){if(!session||session.role!=="admin")return;renderInv();renderAdminOrders();renderAdminUsers();$("inv").classList.add("on");$("inv").setAttribute("aria-hidden","false");document.body.classList.add("lock")}
 function closeInv(){$("inv").classList.remove("on");$("inv").setAttribute("aria-hidden","true");document.body.classList.remove("lock")}
 document.querySelectorAll(".openInv").forEach(function(el){el.addEventListener("click",function(e){e.preventDefault();openInv()})});
 $("closeInv").onclick=closeInv;
@@ -460,6 +461,20 @@ try{session = JSON.parse(localStorage.getItem(SKEY))}catch(e){}
 try{var so = JSON.parse(localStorage.getItem(OKEY)); if(Array.isArray(so)) orders = so}catch(e){}
 function saveOrders(){try{localStorage.setItem(OKEY,JSON.stringify(orders))}catch(e){}}
 function saveOrder(o){orders.unshift(o);saveOrders()}
+// Registro de clientes: se crea al ingresar por primera vez (el celular es el identificador)
+var UKEY = "donas_users_v1", users = [];
+try{var su = JSON.parse(localStorage.getItem(UKEY)); if(Array.isArray(su)) users = su}catch(e){}
+function addUser(n,ph){
+  if(users.some(function(u){return u.phone===ph}))return;
+  users.unshift({name:n,phone:ph,date:new Date().toLocaleString("es-CO")});
+  try{localStorage.setItem(UKEY,JSON.stringify(users))}catch(e){}
+}
+function renderAdminUsers(){
+  $("adminUsers").innerHTML = users.length ? users.map(function(u){
+    var n=orders.filter(function(o){return o.phone===u.phone}).length;
+    return '<div class="od"><div class="ln"><b>'+esc(u.name)+'</b><span>'+n+' pedido'+(n===1?'':'s')+'</span></div><small>Cel. '+esc(u.phone)+' · Registrado: '+esc(u.date)+'</small></div>';
+  }).join("") : '<p class="empty">Aún no hay clientes registrados en este navegador.</p>';
+}
 function setSession(s){
   session = s;
   try{if(s)localStorage.setItem(SKEY,JSON.stringify(s));else localStorage.removeItem(SKEY)}catch(e){}
@@ -508,7 +523,7 @@ $("loginForm").addEventListener("submit",function(e){
   }else{
     var n=f.lname.value.trim(),ph=f.lphone.value.replace(/\D/g,"");
     if(n.length<2||ph.length<7){$("loginErr").textContent="Escribe tu nombre y un celular válido.";return}
-    setSession({role:"cliente",name:n,phone:ph});toast("¡Bienvenido, "+n+"!");
+    addUser(n,ph);setSession({role:"cliente",name:n,phone:ph});toast("¡Bienvenido, "+n+"!");
   }
   f.reset();closeLogin();
 });
@@ -519,6 +534,7 @@ $("closeLogin").onclick=closeLogin;$("closeOrd").onclick=closeOrders;
 document.querySelectorAll(".logout").forEach(function(b){b.onclick=function(){closeInv();closeOrders();setSession(null);toast("Sesión cerrada")}});
 document.addEventListener("keydown",function(e){if(e.key==="Escape"){closeLogin();closeOrders()}});
 
+if(session&&session.role==="cliente")addUser(session.name,session.phone);
 syncCart();renderSession();renderChips();renderGrid();renderCart();
 </script>
 </body>
